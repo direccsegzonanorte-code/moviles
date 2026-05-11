@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOGÍSTICA 8 - CONTROL OPERATIVO</title>
+    <title>LOGÍSTICA 8 - CONTROL OPERATIVO FINAL</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -49,7 +49,6 @@
         th { background: #f1f3f9; padding: 15px; font-size: 0.8rem; color: #333; text-transform: uppercase; text-align: left; }
         td { padding: 12px 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-align: middle; }
         
-        /* Botones de Comando */
         .btn-cmd {
             padding: 8px 12px;
             border: none;
@@ -61,15 +60,12 @@
             align-items: center;
             gap: 6px;
             transition: 0.2s;
-            min-width: 140px;
+            min-width: 150px;
             justify-content: center;
         }
 
         .btn-servicio { background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
-        .btn-servicio:hover { background: #2e7d32; color: white; }
-
         .btn-fuera { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
-        .btn-fuera:hover { background: #c62828; color: white; }
 
         .btn-km {
             background: var(--accent);
@@ -83,7 +79,6 @@
             width: 100%;
             margin-top: 5px;
         }
-        .btn-km:hover { background: #1a237e; }
 
         .km-val { font-weight: bold; font-family: monospace; font-size: 1.1rem; color: #222; }
         code { background: #f4f4f4; padding: 3px 6px; border-radius: 4px; font-weight: bold; color: #d63384; }
@@ -92,19 +87,19 @@
 <body>
 
 <header>
-    <div class="logo-area"><i class="fas fa-shuttle-van"></i> LOGÍSTICA 8 | GESTIÓN DE FLOTA</div>
+    <div class="logo-area"><i class="fas fa-shuttle-van"></i> LOGÍSTICA 8 | GESTIÓN OPERATIVA</div>
     <div id="clock">--:--:--</div>
 </header>
 
 <main>
     <div class="stats-grid">
-        <div class="stat-card" style="border-top: 4px solid var(--accent);"><h3>Total</h3><div class="num" id="st-total">56</div></div>
+        <div class="stat-card" style="border-top: 4px solid var(--accent);"><h3>Total Móviles</h3><div class="num" id="st-total">56</div></div>
         <div class="stat-card" style="border-top: 4px solid var(--success);"><h3>En Servicio</h3><div class="num" id="st-on" style="color: var(--success)">0</div></div>
         <div class="stat-card" style="border-top: 4px solid var(--danger);"><h3>Fuera de Servicio</h3><div class="num" id="st-off" style="color: var(--danger)">0</div></div>
     </div>
 
     <div class="search-bar">
-        <input type="text" id="mainSearch" onkeyup="render()" placeholder="Buscar móvil (ID, Patente o Destino)...">
+        <input type="text" id="mainSearch" onkeyup="render()" placeholder="Filtrar por ID, Patente o Destino...">
     </div>
 
     <div class="table-container">
@@ -125,26 +120,65 @@
 </main>
 
 <script>
-    // LISTADO OFICIAL DE 56 UNIDADES
-    const ids = [
-        "8472", "7589", "10746", "D54", "D65", "11207", "8343", "10368", "10268", "10272",
-        "9588", "9577", "9639", "9413", "9370", "9233", "9634", "10216", "10586", "10650",
-        "11213", "11220", "11311", "11302", "11209", "11184", "11217", "11204", "11140",
-        "10267", "10328", "8608", "9579", "9894", "9895", "10008", "10023", "10038",
-        "10457", "10790", "9403", "9387", "11303", "11444", "11270", "11188", "11317", "9626",
-        "A2465", "A2544", "A2613", "A2623", "A2624", "A2647", "A2652", "A2662"
+    // DATOS ORIGINALES RESTAURADOS (56 UNIDADES)
+    const flota = [
+        {id:"8472", m:"CHEVROLET S10", p:"AC151SZ", t:"PICK-UP", a:"2018", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"7589", m:"FIAT STRADA", p:"AA053UX", t:"SEDAN", a:"2016", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"10746", m:"NISSAN FRONTIER", p:"AG567QT", t:"PICK-UP", a:"2023", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"D54", m:"CARRO", p:"AC151SZ", t:"CARRO", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"D65", m:"PLANCHA", p:"AC151SZ", t:"PLANCHA", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"11207", m:"NISSAN FRONTIER", p:"AH337ES", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 14", km: 0, activo: true},
+        {id:"8343", m:"CHEVROLET S10", p:"AB549FZ", t:"PICK-UP", a:"2017", z:"COMISARIA 14A", km: 0, activo: true},
+        {id:"10368", m:"FIAT CRONOS", p:"AG303JT", t:"SEDAN", a:"2023", z:"COMISARIA 14A", km: 0, activo: true},
+        {id:"10268", m:"FIAT CRONOS", p:"AG297CF", t:"SEDAN", a:"2023", z:"COMISARIA 14B", km: 0, activo: true},
+        {id:"10272", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 14C", km: 0, activo: true},
+        {id:"9588", m:"FIAT CRONOS", p:"AF625ZE", t:"SEDAN", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9577", m:"FIAT CRONOS", p:"AF625ZF", t:"SEDAN", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9639", m:"NISSAN FRONTIER", p:"AF596JP", t:"PICK-UP", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9413", m:"NISSAN FRONTIER", p:"AE919XV", t:"PICK-UP", a:"2021", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9370", m:"NISSAN FRONTIER", p:"AE919YB", t:"PICK-UP", a:"2021", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9233", m:"NISSAN FRONTIER", p:"AE291QY", t:"PICK-UP", a:"2020", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9634", m:"NISSAN FRONTIER", p:"AF575WQ", t:"PICK-UP", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"10216", m:"NISSAN FRONTIER", p:"AF913YP", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"10586", m:"NISSAN FRONTIER", p:"AG567XD", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"10650", m:"NISSAN FRONTIER", p:"AG542SM", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11213", m:"NISSAN FRONTIER", p:"AH485FE", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11220", m:"NISSAN FRONTIER", p:"AH268DJ", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11311", m:"NISSAN FRONTIER", p:"AH568ZN", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11302", m:"NISSAN FRONTIER", p:"AH337FB", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11209", m:"NISSAN FRONTIER", p:"AH568ZU", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11184", m:"NISSAN FRONTIER", p:"AH569AH", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11217", m:"NISSAN FRONTIER", p:"AH538CN", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11204", m:"NISSAN FRONTIER", p:"AH485FF", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11140", m:"NISSAN FRONTIER", p:"AH268DZ", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 15", km: 0, activo: true},
+        {id:"10267", m:"FIAT CRONOS", p:"AG274HF", t:"SEDAN", a:"2023", z:"COMISARIA 15B", km: 0, activo: true},
+        {id:"10328", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 15A", km: 0, activo: true},
+        {id:"8608", m:"FIAT SIENA", p:"AC591MP", t:"SEDAN", a:"2018", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9579", m:"FIAT CRONOS", p:"AF614NT", t:"SEDAN", a:"2022", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9894", m:"FIAT CRONOS", p:"AF913UK", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9895", m:"FIAT CRONOS", p:"AF911SU", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10008", m:"FIAT CRONOS", p:"AF911QM", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10023", m:"FIAT CRONOS", p:"AF911RC", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10038", m:"FIAT CRONOS", p:"AF913UC", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10457", m:"NISSAN FRONTIER", p:"AG318NY", t:"PICK-UP", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10790", m:"NISSAN FRONTIER", p:"AG583TI", t:"PICK-UP", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9403", m:"NISSAN FRONTIER", p:"AE896HO", t:"PICK-UP", a:"2021", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9387", m:"NISSAN FRONTIER", p:"AE919XN", t:"PICK-UP", a:"2021", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11303", m:"NISSAN FRONTIER", p:"AH359ED", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11444", m:"NISSAN FRONTIER", p:"AH337EGP", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11270", m:"NISSAN FRONTIER", p:"AH255TM", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11188", m:"NISSAN FRONTIER", p:"AH568ZY", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11317", m:"NISSAN FRONTIER", p:"AH409IE", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9626", m:"NISSAN FRONTIER", p:"AF575WD", t:"PICK-UP", a:"2022", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"A2465", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2544", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2613", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2623", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2624", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2647", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2652", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2662", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true}
     ];
-
-    const flota = ids.map(id => {
-        let motor = "NISSAN FRONTIER";
-        let destino = "DIVISION CAP 14";
-        if(id.startsWith("A")) motor = "MOTO KAWASAKI";
-        else if(id.startsWith("D")) { motor = (id === "D54" ? "CARRO" : "PLANCHA"); destino = "ZONA 8"; }
-        else if(["7589","10368","10268","10272","9588","9577","10267","10328","8608","9579","9894","9895","10008","10023","10038"].includes(id)) motor = "FIAT CRONOS";
-        if(id > "11000" && !id.startsWith("A")) destino = "DIVISION CAP 15";
-        
-        return { id, motor, patente: "P-" + id, km: 0, activo: true, destino };
-    });
 
     function render() {
         const query = document.getElementById('mainSearch').value.toLowerCase();
@@ -152,19 +186,19 @@
         
         const filtrados = flota.filter(v => 
             v.id.toLowerCase().includes(query) || 
-            v.destino.toLowerCase().includes(query) ||
-            v.patente.toLowerCase().includes(query)
+            v.p.toLowerCase().includes(query) ||
+            v.z.toLowerCase().includes(query)
         );
 
         tbody.innerHTML = filtrados.map(v => `
             <tr>
                 <td><strong>${v.id}</strong></td>
-                <td><div style="font-weight:600">${v.motor}</div></td>
-                <td><code>${v.patente}</code></td>
+                <td><div style="font-weight:600">${v.m}</div></td>
+                <td><code>${v.p}</code></td>
                 <td>
                     <div class="km-val">${v.km.toLocaleString()} KM</div>
                     <button class="btn-km" onclick="updateKM('${v.id}')">
-                        <i class="fas fa-edit"></i> ACTUALIZAR KM
+                        <i class="fas fa-edit"></i> ACTUALIZAR KILOMETRAJE
                     </button>
                 </td>
                 <td>
@@ -173,7 +207,7 @@
                         ${v.activo ? 'EN SERVICIO' : 'FUERA DE SERVICIO'}
                     </button>
                 </td>
-                <td><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> ${v.destino}</td>
+                <td><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> ${v.z}</td>
             </tr>
         `).join('');
 
@@ -183,7 +217,7 @@
 
     function updateKM(id) {
         const item = flota.find(x => x.id === id);
-        const nuevoKM = prompt(`Actualizar Kilometraje para Móvil ${id}:`, item.km);
+        const nuevoKM = prompt(`Ingresar Kilometraje para Móvil ${id}:`, item.km);
         if(nuevoKM !== null && !isNaN(nuevoKM) && nuevoKM !== "") {
             item.km = parseInt(nuevoKM);
             render();
