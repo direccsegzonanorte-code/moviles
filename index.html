@@ -20,7 +20,6 @@
         * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; color: #333; }
 
-        /* Header Actualizado */
         header {
             background: var(--primary);
             color: white;
@@ -40,7 +39,6 @@
 
         .main-container { display: grid; grid-template-columns: 240px 1fr; flex-grow: 1; overflow: hidden; }
 
-        /* Sidebar */
         nav { background: var(--secondary); color: white; padding: 1rem; border-right: 1px solid rgba(255,255,255,0.1); }
         .nav-group-title { font-size: 0.7rem; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px 10px; }
         .nav-item {
@@ -56,7 +54,6 @@
         }
         .nav-item:hover, .nav-item.active { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(48, 79, 254, 0.3); }
 
-        /* Dashboard */
         main { padding: 25px; overflow-y: auto; background: var(--bg); }
         .view { display: none; animation: fadeIn 0.3s ease; }
         .view.active { display: block; }
@@ -67,7 +64,6 @@
         .stat-card h3 { margin: 0; font-size: 0.7rem; color: #666; text-transform: uppercase; }
         .stat-card .num { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
 
-        /* Filtros */
         .search-container {
             background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;
             display: flex; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -75,26 +71,19 @@
         .search-container input { flex-grow: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; }
         .search-container select { padding: 10px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
 
-        /* Tabla */
         .table-wrap { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { background: #f8f9fa; color: var(--primary); padding: 15px; font-size: 0.8rem; text-transform: uppercase; border-bottom: 2px solid #eee; }
         td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; vertical-align: middle; }
         tr:hover { background: #f1f5ff; }
 
-        /* Tags e Indicadores */
         .tag { padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; border: 1px solid transparent; }
-        
         .status-on { background: #e8f5e9; color: #2e7d32; cursor: pointer; border-color: #c8e6c9; }
-        .status-on:hover { background: #c8e6c9; }
-        
         .status-off { background: #ffebee; color: #c62828; cursor: pointer; border-color: #ffcdd2; }
-        .status-off:hover { background: #ffcdd2; }
         
         .km-box { display: flex; flex-direction: column; }
         .btn-km { border: none; background: #304ffe15; color: var(--accent); padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 0.65rem; font-weight: bold; margin-top: 5px; width: fit-content; }
-        .btn-km:hover { background: var(--accent); color: white; }
-
+        
         code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #d63384; font-weight: bold; }
     </style>
 </head>
@@ -118,13 +107,12 @@
             <i class="fas fa-tools"></i> Taller Mecánico
         </div>
         <div class="nav-group-title">Administración</div>
-        <div class="nav-item" onclick="switchView('v-taller', this)">
+        <div class="nav-item">
             <i class="fas fa-file-invoice"></i> Reportes
         </div>
     </nav>
 
     <main>
-        <!-- VISTA FLOTA -->
         <div id="v-flota" class="view active">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -160,7 +148,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID Interno</th>
+                            <th>ID (Últ. 4)</th>
                             <th>Vehículo / Tipo</th>
                             <th>Patente</th>
                             <th>Recorrido (KM)</th>
@@ -173,20 +161,18 @@
             </div>
         </div>
 
-        <!-- VISTA TALLER (Placeholder) -->
         <div id="v-taller" class="view">
             <h2>Módulo de Taller</h2>
             <div style="background:white; padding:40px; border-radius:10px; text-align:center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                 <i class="fas fa-wrench" style="font-size:3.5rem; color:var(--accent); margin-bottom:20px;"></i>
                 <h3>Control de Mantenimiento</h3>
-                <p style="color: #666;">Seleccione una unidad desde la pestaña de Flota para abrir una Orden de Trabajo.</p>
+                <p>Gestión de reparaciones y preventivos.</p>
             </div>
         </div>
     </main>
 </div>
 
 <script>
-    // BASE DE DATOS UNIFICADA
     const flota = [
         {id:"18472", m:"CHEVROLET S10", p:"AC151SZ", t:"PICK-UP", a:"2018", z:"DIR. SEGURIDAD ZONA 8", km: 145200, activo: true},
         {id:"27589", m:"FIAT STRADA", p:"AA053UX", t:"SEDAN", a:"2016", z:"DIR. SEGURIDAD ZONA 8", km: 98000, activo: false},
@@ -196,15 +182,18 @@
         {id:"49A2465", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 800, activo: true},
         {id:"50A2544", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 1100, activo: true},
         {id:"51A2613", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 450, activo: false},
-        {id:"52A2623", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 2100, activo: true},
         {id:"1010272", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 14C", km: 32100, activo: true}
     ];
 
     function renderTable(data) {
         const tbody = document.getElementById('tbodyFlota');
-        tbody.innerHTML = data.map(v => `
+        tbody.innerHTML = data.map(v => {
+            // Lógica para dejar solo los últimos 4 dígitos
+            const idCorto = v.id.toString().slice(-4);
+            
+            return `
             <tr>
-                <td><strong>#${v.id}</strong></td>
+                <td><strong>${idCorto}</strong></td>
                 <td>
                     <div style="font-weight:600">${v.m}</div>
                     <div style="font-size:0.75rem; color:#777">${v.t} | Mod. ${v.a}</div>
@@ -224,11 +213,10 @@
                 </td>
                 <td><i class="fas fa-map-marker-alt" style="color:var(--accent); margin-right:5px;"></i> ${v.z}</td>
             </tr>
-        `).join('');
+        `}).join('');
         updateStats(flota);
     }
 
-    // Funciones de Lógica
     function toggleStatus(id) {
         const item = flota.find(x => x.id === id);
         if(item) {
@@ -239,7 +227,7 @@
 
     function cambiarKM(id) {
         const unidad = flota.find(x => x.id === id);
-        const nuevo = prompt(`Actualizar KM para la unidad ${unidad.id}:`, unidad.km);
+        const nuevo = prompt(`Actualizar KM para unidad #${unidad.id.toString().slice(-4)}:`, unidad.km);
         if(nuevo !== null && !isNaN(nuevo) && nuevo !== "") {
             unidad.km = parseInt(nuevo);
             runFilters();
@@ -256,7 +244,6 @@
     function runFilters() {
         const query = document.getElementById('mainSearch').value.toLowerCase();
         const type = document.getElementById('filterType').value;
-        
         const filtrados = flota.filter(v => {
             const matchSearch = Object.values(v).some(val => val.toString().toLowerCase().includes(query));
             const matchType = type === "" || v.t === type;
@@ -272,12 +259,9 @@
         el.classList.add('active');
     }
 
-    // Reloj en tiempo real
     setInterval(() => {
         const now = new Date();
-        document.getElementById('clock').innerText = now.toLocaleString('es-AR', { 
-            hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' 
-        });
+        document.getElementById('clock').innerText = now.toLocaleString('es-AR');
     }, 1000);
 
     window.onload = () => renderTable(flota);
