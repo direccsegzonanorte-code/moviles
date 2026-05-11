@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA LOGÍSTICA 8</title>
+    <title>SISTEMA LOGÍSTICA 8 - FLOTA COMPLETA</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -33,7 +33,6 @@
         }
 
         .logo-area { display: flex; align-items: center; gap: 15px; font-weight: bold; font-size: 1.3rem; letter-spacing: 1px; }
-        .logo-area span { color: var(--text-light); }
         .logo-area b { color: var(--accent); margin-left: 5px; }
         #clock { font-family: monospace; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 4px; font-size: 0.9rem; }
 
@@ -59,7 +58,7 @@
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .stat-card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-top: 4px solid var(--accent); }
         .stat-card h3 { margin: 0; font-size: 0.7rem; color: #666; text-transform: uppercase; }
         .stat-card .num { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
@@ -77,14 +76,12 @@
         td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; vertical-align: middle; }
         tr:hover { background: #f1f5ff; }
 
-        .tag { padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; border: 1px solid transparent; }
-        .status-on { background: #e8f5e9; color: #2e7d32; cursor: pointer; border-color: #c8e6c9; }
-        .status-off { background: #ffebee; color: #c62828; cursor: pointer; border-color: #ffcdd2; }
-        
-        .km-box { display: flex; flex-direction: column; }
-        .btn-km { border: none; background: #304ffe15; color: var(--accent); padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 0.65rem; font-weight: bold; margin-top: 5px; width: fit-content; }
+        .tag { padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+        .status-on { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .status-off { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
         
         code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #d63384; font-weight: bold; }
+        .btn-km { border: none; background: #304ffe15; color: var(--accent); padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -92,7 +89,7 @@
 <header>
     <div class="logo-area">
         <i class="fas fa-shield-alt"></i>
-        <span>LOGÍSTICA 8 | <b>FLOTA</b></span>
+        <span>LOGÍSTICA 8 | <b>CENTRAL FLOTA</b></span>
     </div>
     <div id="clock">--:--:--</div>
 </header>
@@ -107,41 +104,27 @@
             <i class="fas fa-tools"></i> Taller Mecánico
         </div>
         <div class="nav-group-title">Administración</div>
-        <div class="nav-item">
-            <i class="fas fa-file-invoice"></i> Reportes
-        </div>
+        <div class="nav-item"><i class="fas fa-file-invoice"></i> Reportes</div>
     </nav>
 
     <main>
         <div id="v-flota" class="view active">
             <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Unidades</h3>
-                    <div class="num" id="st-total">0</div>
-                </div>
-                <div class="stat-card" style="border-top-color: var(--success)">
-                    <h3>En Servicio</h3>
-                    <div class="num" id="st-on" style="color: var(--success)">0</div>
-                </div>
-                <div class="stat-card" style="border-top-color: var(--danger)">
-                    <h3>Fuera de Servicio</h3>
-                    <div class="num" id="st-off" style="color: var(--danger)">0</div>
-                </div>
-                <div class="stat-card" style="border-top-color: var(--warning)">
-                    <h3>Motos Activas</h3>
-                    <div class="num" id="st-motos" style="color: #f57c00">0</div>
-                </div>
+                <div class="stat-card"><h3>Total Unidades</h3><div class="num" id="st-total">0</div></div>
+                <div class="stat-card" style="border-top-color: var(--success)"><h3>Operativos</h3><div class="num" id="st-on" style="color: var(--success)">0</div></div>
+                <div class="stat-card" style="border-top-color: var(--danger)"><h3>Fuera de Servicio</h3><div class="num" id="st-off" style="color: var(--danger)">0</div></div>
+                <div class="stat-card" style="border-top-color: var(--warning)"><h3>Motos</h3><div class="num" id="st-motos" style="color: #f57c00">0</div></div>
             </div>
 
             <div class="search-container">
                 <i class="fas fa-search" style="align-self: center; color: #999;"></i>
-                <input type="text" id="mainSearch" onkeyup="runFilters()" placeholder="Filtrar por ID, Patente, Marca o Destino...">
+                <input type="text" id="mainSearch" onkeyup="runFilters()" placeholder="Buscar por ID, Patente, Marca o Destino...">
                 <select id="filterType" onchange="runFilters()">
                     <option value="">Todos los Tipos</option>
                     <option value="PICK-UP">Pick-Up</option>
                     <option value="SEDAN">Sedán</option>
                     <option value="MOTO">Motos</option>
-                    <option value="CARRO">Carros / Especiales</option>
+                    <option value="ESPECIAL">Especiales (Carro/Plancha)</option>
                 </select>
             </div>
 
@@ -149,11 +132,11 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID (Últ. 4)</th>
+                            <th>ID</th>
                             <th>Vehículo / Tipo</th>
                             <th>Patente</th>
-                            <th>Recorrido (KM)</th>
-                            <th>Disponibilidad</th>
+                            <th>Kilometraje</th>
+                            <th>Estado</th>
                             <th>Destino Asignado</th>
                         </tr>
                     </thead>
@@ -164,23 +147,27 @@
 
         <div id="v-taller" class="view">
             <h2>Módulo de Taller</h2>
-            <div style="background:white; padding:40px; border-radius:10px; text-align:center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                <i class="fas fa-wrench" style="font-size:3.5rem; color:var(--accent); margin-bottom:20px;"></i>
-                <h3>Control de Mantenimiento</h3>
-                <p>Gestión de reparaciones y preventivos.</p>
+            <div style="background:white; padding:40px; border-radius:10px; text-align:center;">
+                <i class="fas fa-wrench" style="font-size:3rem; color:var(--accent); margin-bottom:15px;"></i>
+                <h3>Control Mecánico</h3>
+                <p>Gestión de mantenimientos preventivos.</p>
             </div>
         </div>
     </main>
 </div>
 
 <script>
+    // LISTA UNIFICADA DE 56 MÓVILES
     const flota = [
-        {id:"8472", m:"CHEVROLET S10", p:"AC151SZ", t:"PICK-UP", a:"2018", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"7589", m:"FIAT STRADA", p:"AA053UX", t:"SEDAN", a:"2016", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"10746", m:"NISSAN FRONTIER", p:"AG567QT", t:"PICK-UP", a:"2023", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"D54", m:"CARRO", p:"AC151SZ", t:"CARRO", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"D65", m:"PLANCHA", p:"AC151SZ", t:"PLANCHA", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"11207", m:"NISSAN FRONTIER", p:"AH337ES", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 14", km: 0, activo: true},
+        // ZONA 8
+        {id:"8472", m:"CHEVROLET S10", p:"AC151SZ", t:"PICK-UP", a:"2018", z:"DIR. SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"7589", m:"FIAT STRADA", p:"AA053UX", t:"SEDAN", a:"2016", z:"DIR. SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"10746", m:"NISSAN FRONTIER", p:"AG567QT", t:"PICK-UP", a:"2023", z:"DIR. SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"D54", m:"CARRO 0100", p:"AC151SZ", t:"ESPECIAL", a:"0", z:"DIR. SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"D65", m:"PLANCHA 101", p:"AC151SZ", t:"ESPECIAL", a:"0", z:"DIR. SEGURIDAD ZONA 8", km: 0, activo: true},
+        
+        // DISTRITO 14 / COMISARIAS / CAP 14
+        {id:"11207", m:"NISSAN FRONTIER", p:"AH337ES", t:"PICK-UP", a:"2025", z:"DISTRITO 14", km: 0, activo: true},
         {id:"8343", m:"CHEVROLET S10", p:"AB549FZ", t:"PICK-UP", a:"2017", z:"COMISARIA 14A", km: 0, activo: true},
         {id:"10368", m:"FIAT CRONOS", p:"AG303JT", t:"SEDAN", a:"2023", z:"COMISARIA 14A", km: 0, activo: true},
         {id:"10268", m:"FIAT CRONOS", p:"AG297CF", t:"SEDAN", a:"2023", z:"COMISARIA 14B", km: 0, activo: true},
@@ -203,7 +190,9 @@
         {id:"11184", m:"NISSAN FRONTIER", p:"AH569AH", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
         {id:"11217", m:"NISSAN FRONTIER", p:"AH538CN", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
         {id:"11204", m:"NISSAN FRONTIER", p:"AH485FF", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11140", m:"NISSAN FRONTIER", p:"AH268DZ", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 15", km: 0, activo: true},
+        
+        // DISTRITO 15 / COMISARIAS / CAP 15
+        {id:"11140", m:"NISSAN FRONTIER", p:"AH268DZ", t:"PICK-UP", a:"2025", z:"DISTRITO 15", km: 0, activo: true},
         {id:"10267", m:"FIAT CRONOS", p:"AG274HF", t:"SEDAN", a:"2023", z:"COMISARIA 15B", km: 0, activo: true},
         {id:"10328", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 15A", km: 0, activo: true},
         {id:"8608", m:"FIAT SIENA", p:"AC591MP", t:"SEDAN", a:"2018", z:"DIVISION CAP 15", km: 0, activo: true},
@@ -223,6 +212,8 @@
         {id:"11188", m:"NISSAN FRONTIER", p:"AH568ZY", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
         {id:"11317", m:"NISSAN FRONTIER", p:"AH409IE", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
         {id:"9626", m:"NISSAN FRONTIER", p:"AF575WD", t:"PICK-UP", a:"2022", z:"DIVISION CAP 15", km: 0, activo: true},
+
+        // MOTOS CAP 14
         {id:"A2465", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
         {id:"A2544", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
         {id:"A2613", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
@@ -235,57 +226,46 @@
 
     function renderTable(data) {
         const tbody = document.getElementById('tbodyFlota');
-        tbody.innerHTML = data.map(v => {
-            const idDisplay = v.id.length > 4 ? v.id.slice(-4) : v.id;
-            
-            return `
+        tbody.innerHTML = data.map(v => `
             <tr>
-                <td><strong>${idDisplay}</strong></td>
+                <td><strong>${v.id}</strong></td>
                 <td>
                     <div style="font-weight:600">${v.m}</div>
                     <div style="font-size:0.75rem; color:#777">${v.t} | Mod. ${v.a}</div>
                 </td>
                 <td><code>${v.p}</code></td>
                 <td>
-                    <div class="km-box">
-                        <span style="font-weight:bold; color:#444">${v.km.toLocaleString()} KM</span>
-                        <button class="btn-km" onclick="cambiarKM('${v.id}')"><i class="fas fa-edit"></i> Editar</button>
-                    </div>
+                    <span style="font-weight:bold">${v.km.toLocaleString()} KM</span><br>
+                    <button class="btn-km" onclick="cambiarKM('${v.id}')"><i class="fas fa-edit"></i></button>
                 </td>
                 <td>
                     <span class="tag ${v.activo ? 'status-on' : 'status-off'}" onclick="toggleStatus('${v.id}')">
                         <i class="fas ${v.activo ? 'fa-check-circle' : 'fa-times-circle'}"></i>
-                        ${v.activo ? 'OPERATIVO' : 'FUERA DE SERVICIO'}
+                        ${v.activo ? 'OPERATIVO' : 'F. SERVICIO'}
                     </span>
                 </td>
-                <td><i class="fas fa-map-marker-alt" style="color:var(--accent); margin-right:5px;"></i> ${v.z}</td>
+                <td><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> ${v.z}</td>
             </tr>
-        `}).join('');
+        `).join('');
         updateStats(flota);
-    }
-
-    function toggleStatus(id) {
-        const item = flota.find(x => x.id === id);
-        if(item) {
-            item.activo = !item.activo;
-            runFilters();
-        }
-    }
-
-    function cambiarKM(id) {
-        const unidad = flota.find(x => x.id === id);
-        const nuevo = prompt(`Actualizar KM para unidad #${unidad.id}:`, unidad.km);
-        if(nuevo !== null && !isNaN(nuevo) && nuevo !== "") {
-            unidad.km = parseInt(nuevo);
-            runFilters();
-        }
     }
 
     function updateStats(data) {
         document.getElementById('st-total').innerText = data.length;
         document.getElementById('st-on').innerText = data.filter(x => x.activo).length;
         document.getElementById('st-off').innerText = data.filter(x => !x.activo).length;
-        document.getElementById('st-motos').innerText = data.filter(x => x.t === 'MOTO' && x.activo).length;
+        document.getElementById('st-motos').innerText = data.filter(x => x.t === 'MOTO').length;
+    }
+
+    function toggleStatus(id) {
+        const item = flota.find(x => x.id === id);
+        if(item) { item.activo = !item.activo; runFilters(); }
+    }
+
+    function cambiarKM(id) {
+        const item = flota.find(x => x.id === id);
+        const nuevo = prompt(`KM para unidad ${id}:`, item.km);
+        if(nuevo !== null && !isNaN(nuevo)) { item.km = parseInt(nuevo); runFilters(); }
     }
 
     function runFilters() {
@@ -307,8 +287,7 @@
     }
 
     setInterval(() => {
-        const now = new Date();
-        document.getElementById('clock').innerText = now.toLocaleString('es-AR');
+        document.getElementById('clock').innerText = new Date().toLocaleString('es-AR');
     }, 1000);
 
     window.onload = () => renderTable(flota);
