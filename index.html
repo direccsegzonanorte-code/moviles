@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA LOGÍSTICA 8 - CONTROL DE FLOTA</title>
+    <title>LOGÍSTICA 8 - CONTROL OPERATIVO</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -15,7 +15,7 @@
             --bg: #e9ecef;
         }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background-color: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; }
 
         header {
@@ -26,66 +26,85 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 4px solid var(--accent);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .logo-area { display: flex; align-items: center; gap: 12px; font-weight: bold; font-size: 1.2rem; }
         #clock { font-family: monospace; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 4px; }
 
-        main { padding: 25px; overflow-y: auto; flex-grow: 1; }
+        main { padding: 20px; overflow-y: auto; flex-grow: 1; }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 6px solid var(--accent); }
-        .stat-card h3 { margin: 0; font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-card .num { font-size: 2rem; font-weight: bold; margin-top: 8px; color: var(--primary); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .stat-card h3 { margin: 0; font-size: 0.8rem; color: #666; text-transform: uppercase; }
+        .stat-card .num { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
 
         .search-bar {
-            background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px;
-            display: flex; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;
+            display: flex; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .search-bar input { flex-grow: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; outline: none; }
-        .search-bar input:focus { border-color: var(--accent); }
+        .search-bar input { flex-grow: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; outline: none; }
 
-        .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { background: #f1f3f9; padding: 18px; font-size: 0.85rem; color: var(--primary); text-transform: uppercase; }
-        td { padding: 15px 18px; border-bottom: 1px solid #f0f0f0; font-size: 0.95rem; }
-        tr:hover { background: #f8faff; }
-
-        .status-pill { 
-            padding: 8px 14px; border-radius: 25px; font-size: 0.75rem; font-weight: bold; 
-            cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent;
-        }
-        .en-servicio { background: #e8f5e9; color: #2e7d32; border-color: #c8e6c9; }
-        .fuera-servicio { background: #ffebee; color: #c62828; border-color: #ffcdd2; }
-
-        .btn-update-km {
-            background: var(--accent); color: white; border: none; padding: 6px 12px;
-            border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600;
-            display: flex; align-items: center; gap: 5px; transition: 0.2s;
-        }
-        .btn-update-km:hover { background: #1a237e; }
+        .table-container { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f1f3f9; padding: 15px; font-size: 0.8rem; color: #333; text-transform: uppercase; text-align: left; }
+        td { padding: 12px 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-align: middle; }
         
-        .km-display { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #444; font-size: 1.1rem; }
-        code { background: #eee; padding: 3px 6px; border-radius: 4px; font-weight: bold; color: #d63384; }
+        /* Botones de Comando */
+        .btn-cmd {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .btn-servicio { background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
+        .btn-servicio:hover { background: #2e7d32; color: white; }
+
+        .btn-fuera { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
+        .btn-fuera:hover { background: #c62828; color: white; }
+
+        .btn-km {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75rem;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .btn-km:hover { background: #1a237e; }
+
+        .km-val { font-weight: bold; font-family: monospace; font-size: 1.1rem; color: #222; }
+        code { background: #f4f4f4; padding: 3px 6px; border-radius: 4px; font-weight: bold; color: #d63384; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-area"><i class="fas fa-shield-alt"></i> SISTEMA LOGÍSTICA 8 | 56 UNIDADES</div>
-    <div id="clock">00:00:00</div>
+    <div class="logo-area"><i class="fas fa-shuttle-van"></i> LOGÍSTICA 8 | GESTIÓN DE FLOTA</div>
+    <div id="clock">--:--:--</div>
 </header>
 
 <main>
     <div class="stats-grid">
-        <div class="stat-card"><h3>Flota Total</h3><div class="num" id="st-total">56</div></div>
-        <div class="stat-card" style="border-left-color: var(--success)"><h3>En Servicio</h3><div class="num" id="st-on" style="color: var(--success)">0</div></div>
-        <div class="stat-card" style="border-left-color: var(--danger)"><h3>Fuera de Servicio</h3><div class="num" id="st-off" style="color: var(--danger)">0</div></div>
+        <div class="stat-card" style="border-top: 4px solid var(--accent);"><h3>Total</h3><div class="num" id="st-total">56</div></div>
+        <div class="stat-card" style="border-top: 4px solid var(--success);"><h3>En Servicio</h3><div class="num" id="st-on" style="color: var(--success)">0</div></div>
+        <div class="stat-card" style="border-top: 4px solid var(--danger);"><h3>Fuera de Servicio</h3><div class="num" id="st-off" style="color: var(--danger)">0</div></div>
     </div>
 
     <div class="search-bar">
-        <input type="text" id="mainSearch" onkeyup="render()" placeholder="Filtrar por ID de móvil, patente o destino (Ej: 11207, CAP 14)...">
+        <input type="text" id="mainSearch" onkeyup="render()" placeholder="Buscar móvil (ID, Patente o Destino)...">
     </div>
 
     <div class="table-container">
@@ -93,11 +112,11 @@
             <thead>
                 <tr>
                     <th>Móvil</th>
-                    <th>Vehículo / Tipo</th>
+                    <th>Vehículo</th>
                     <th>Patente</th>
-                    <th>Kilometraje</th>
-                    <th>Estado de Unidad</th>
-                    <th>Destino Asignado</th>
+                    <th style="width: 180px;">Kilometraje</th>
+                    <th>Comando de Estado</th>
+                    <th>Destino</th>
                 </tr>
             </thead>
             <tbody id="tbody"></tbody>
@@ -106,7 +125,7 @@
 </main>
 
 <script>
-    // LISTADO EXACTO DE 56 MÓVILES SUMINISTRADO
+    // LISTADO OFICIAL DE 56 UNIDADES
     const ids = [
         "8472", "7589", "10746", "D54", "D65", "11207", "8343", "10368", "10268", "10272",
         "9588", "9577", "9639", "9413", "9370", "9233", "9634", "10216", "10586", "10650",
@@ -116,20 +135,15 @@
         "A2465", "A2544", "A2613", "A2623", "A2624", "A2647", "A2652", "A2662"
     ];
 
-    // Inicialización de datos
     const flota = ids.map(id => {
         let motor = "NISSAN FRONTIER";
-        let cat = "PICK-UP";
         let destino = "DIVISION CAP 14";
-
-        if(id.startsWith("A")) { motor = "KAWASAKI XLX300"; cat = "MOTO"; }
-        else if(id.startsWith("D")) { motor = (id === "D54" ? "CARRO" : "PLANCHA"); cat = "ESPECIAL"; destino = "ZONA 8"; }
-        else if(["7589","10368","10268","10272","9588","9577","10267","10328","8608","9579","9894","9895","10008","10023","10038"].includes(id)) {
-            motor = "FIAT CRONOS"; cat = "SEDAN";
-        }
+        if(id.startsWith("A")) motor = "MOTO KAWASAKI";
+        else if(id.startsWith("D")) { motor = (id === "D54" ? "CARRO" : "PLANCHA"); destino = "ZONA 8"; }
+        else if(["7589","10368","10268","10272","9588","9577","10267","10328","8608","9579","9894","9895","10008","10023","10038"].includes(id)) motor = "FIAT CRONOS";
         if(id > "11000" && !id.startsWith("A")) destino = "DIVISION CAP 15";
         
-        return { id, motor, cat, patente: "P-" + id, km: 0, activo: true, destino };
+        return { id, motor, patente: "P-" + id, km: 0, activo: true, destino };
     });
 
     function render() {
@@ -145,42 +159,38 @@
         tbody.innerHTML = filtrados.map(v => `
             <tr>
                 <td><strong>${v.id}</strong></td>
-                <td>
-                    <div style="font-weight:600">${v.motor}</div>
-                    <div style="font-size:0.7rem; color:#8892b0">${v.cat}</div>
-                </td>
+                <td><div style="font-weight:600">${v.motor}</div></td>
                 <td><code>${v.patente}</code></td>
                 <td>
-                    <div class="km-display">${v.km.toLocaleString()} KM</div>
-                    <button class="btn-update-km" onclick="updateKM('${v.id}')">
-                        <i class="fas fa-tachometer-alt"></i> ACTUALIZAR KM
+                    <div class="km-val">${v.km.toLocaleString()} KM</div>
+                    <button class="btn-km" onclick="updateKM('${v.id}')">
+                        <i class="fas fa-edit"></i> ACTUALIZAR KM
                     </button>
                 </td>
                 <td>
-                    <span class="status-pill ${v.activo ? 'en-servicio' : 'fuera-servicio'}" onclick="toggleStatus('${v.id}')">
-                        <i class="fas ${v.activo ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i>
+                    <button class="btn-cmd ${v.activo ? 'btn-servicio' : 'btn-fuera'}" onclick="toggle('${v.id}')">
+                        <i class="fas ${v.activo ? 'fa-check-circle' : 'fa-times-circle'}"></i>
                         ${v.activo ? 'EN SERVICIO' : 'FUERA DE SERVICIO'}
-                    </span>
+                    </button>
                 </td>
                 <td><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> ${v.destino}</td>
             </tr>
         `).join('');
 
-        // Actualizar contadores
         document.getElementById('st-on').innerText = flota.filter(x => x.activo).length;
         document.getElementById('st-off').innerText = flota.filter(x => !x.activo).length;
     }
 
     function updateKM(id) {
         const item = flota.find(x => x.id === id);
-        const nuevoKM = prompt(`Ingrese el Kilometraje actual para el móvil ${id}:`, item.km);
+        const nuevoKM = prompt(`Actualizar Kilometraje para Móvil ${id}:`, item.km);
         if(nuevoKM !== null && !isNaN(nuevoKM) && nuevoKM !== "") {
             item.km = parseInt(nuevoKM);
             render();
         }
     }
 
-    function toggleStatus(id) {
+    function toggle(id) {
         const item = flota.find(x => x.id === id);
         item.activo = !item.activo;
         render();
