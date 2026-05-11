@@ -1,4 +1,321 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA LOGÍSTICA 8</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a192f;
+            --secondary: #172a45;
+            --accent: #304ffe;
+            --success: #00c853;
+            --danger: #ff1744;
+            --warning: #ffea00;
+            --text-light: #f8f9fa;
+            --bg: #e9ecef;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; color: #333; }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--accent);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 15px; font-weight: bold; font-size: 1.3rem; letter-spacing: 1px; }
+        .logo-area span { color: var(--text-light); }
+        .logo-area b { color: var(--accent); margin-left: 5px; }
+        #clock { font-family: monospace; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 4px; font-size: 0.9rem; }
+
+        .main-container { display: grid; grid-template-columns: 240px 1fr; flex-grow: 1; overflow: hidden; }
+
+        nav { background: var(--secondary); color: white; padding: 1rem; border-right: 1px solid rgba(255,255,255,0.1); }
+        .nav-group-title { font-size: 0.7rem; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px 10px; }
+        .nav-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            color: #ccd6f6;
+        }
+        .nav-item:hover, .nav-item.active { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(48, 79, 254, 0.3); }
+
+        main { padding: 25px; overflow-y: auto; background: var(--bg); }
+        .view { display: none; animation: fadeIn 0.3s ease; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-top: 4px solid var(--accent); }
+        .stat-card h3 { margin: 0; font-size: 0.7rem; color: #666; text-transform: uppercase; }
+        .stat-card .num { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
+
+        .search-container {
+            background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;
+            display: flex; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .search-container input { flex-grow: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; }
+        .search-container select { padding: 10px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
+
+        .table-wrap { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #f8f9fa; color: var(--primary); padding: 15px; font-size: 0.8rem; text-transform: uppercase; border-bottom: 2px solid #eee; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; vertical-align: middle; }
+        tr:hover { background: #f1f5ff; }
+
+        .tag { padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; border: 1px solid transparent; }
+        .status-on { background: #e8f5e9; color: #2e7d32; cursor: pointer; border-color: #c8e6c9; }
+        .status-off { background: #ffebee; color: #c62828; cursor: pointer; border-color: #ffcdd2; }
+        
+        .km-box { display: flex; flex-direction: column; }
+        .btn-km { border: none; background: #304ffe15; color: var(--accent); padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 0.65rem; font-weight: bold; margin-top: 5px; width: fit-content; }
+        
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #d63384; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-area">
+        <i class="fas fa-shield-alt"></i>
+        <span>LOGÍSTICA 8 | <b>FLOTA</b></span>
+    </div>
+    <div id="clock">--:--:--</div>
+</header>
+
+<div class="main-container">
+    <nav>
+        <div class="nav-group-title">Operaciones</div>
+        <div class="nav-item active" onclick="switchView('v-flota', this)">
+            <i class="fas fa-truck-monster"></i> Gestión de Flota
+        </div>
+        <div class="nav-item" onclick="switchView('v-taller', this)">
+            <i class="fas fa-tools"></i> Taller Mecánico
+        </div>
+        <div class="nav-group-title">Administración</div>
+        <div class="nav-item">
+            <i class="fas fa-file-invoice"></i> Reportes
+        </div>
+    </nav>
+
+    <main>
+        <div id="v-flota" class="view active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Unidades</h3>
+                    <div class="num" id="st-total">0</div>
+                </div>
+                <div class="stat-card" style="border-top-color: var(--success)">
+                    <h3>En Servicio</h3>
+                    <div class="num" id="st-on" style="color: var(--success)">0</div>
+                </div>
+                <div class="stat-card" style="border-top-color: var(--danger)">
+                    <h3>Fuera de Servicio</h3>
+                    <div class="num" id="st-off" style="color: var(--danger)">0</div>
+                </div>
+                <div class="stat-card" style="border-top-color: var(--warning)">
+                    <h3>Motos Activas</h3>
+                    <div class="num" id="st-motos" style="color: #f57c00">0</div>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <i class="fas fa-search" style="align-self: center; color: #999;"></i>
+                <input type="text" id="mainSearch" onkeyup="runFilters()" placeholder="Filtrar por ID, Patente, Marca o Destino...">
+                <select id="filterType" onchange="runFilters()">
+                    <option value="">Todos los Tipos</option>
+                    <option value="PICK-UP">Pick-Up</option>
+                    <option value="SEDAN">Sedán</option>
+                    <option value="MOTO">Motos</option>
+                    <option value="CARRO">Carros / Especiales</option>
+                </select>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID (Últ. 4)</th>
+                            <th>Vehículo / Tipo</th>
+                            <th>Patente</th>
+                            <th>Recorrido (KM)</th>
+                            <th>Disponibilidad</th>
+                            <th>Destino Asignado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyFlota"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="v-taller" class="view">
+            <h2>Módulo de Taller</h2>
+            <div style="background:white; padding:40px; border-radius:10px; text-align:center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <i class="fas fa-wrench" style="font-size:3.5rem; color:var(--accent); margin-bottom:20px;"></i>
+                <h3>Control de Mantenimiento</h3>
+                <p>Gestión de reparaciones y preventivos.</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    const flota = [
+        {id:"8472", m:"CHEVROLET S10", p:"AC151SZ", t:"PICK-UP", a:"2018", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"7589", m:"FIAT STRADA", p:"AA053UX", t:"SEDAN", a:"2016", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"10746", m:"NISSAN FRONTIER", p:"AG567QT", t:"PICK-UP", a:"2023", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"D54", m:"CARRO", p:"AC151SZ", t:"CARRO", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"D65", m:"PLANCHA", p:"AC151SZ", t:"PLANCHA", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"11207", m:"NISSAN FRONTIER", p:"AH337ES", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 14", km: 0, activo: true},
+        {id:"8343", m:"CHEVROLET S10", p:"AB549FZ", t:"PICK-UP", a:"2017", z:"COMISARIA 14A", km: 0, activo: true},
+        {id:"10368", m:"FIAT CRONOS", p:"AG303JT", t:"SEDAN", a:"2023", z:"COMISARIA 14A", km: 0, activo: true},
+        {id:"10268", m:"FIAT CRONOS", p:"AG297CF", t:"SEDAN", a:"2023", z:"COMISARIA 14B", km: 0, activo: true},
+        {id:"10272", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 14C", km: 0, activo: true},
+        {id:"9588", m:"FIAT CRONOS", p:"AF625ZE", t:"SEDAN", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9577", m:"FIAT CRONOS", p:"AF625ZF", t:"SEDAN", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9639", m:"NISSAN FRONTIER", p:"AF596JP", t:"PICK-UP", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9413", m:"NISSAN FRONTIER", p:"AE919XV", t:"PICK-UP", a:"2021", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9370", m:"NISSAN FRONTIER", p:"AE919YB", t:"PICK-UP", a:"2021", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9233", m:"NISSAN FRONTIER", p:"AE291QY", t:"PICK-UP", a:"2020", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9634", m:"NISSAN FRONTIER", p:"AF575WQ", t:"PICK-UP", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"10216", m:"NISSAN FRONTIER", p:"AF913YP", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"10586", m:"NISSAN FRONTIER", p:"AG567XD", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"10650", m:"NISSAN FRONTIER", p:"AG542SM", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11213", m:"NISSAN FRONTIER", p:"AH485FE", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11220", m:"NISSAN FRONTIER", p:"AH268DJ", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11311", m:"NISSAN FRONTIER", p:"AH568ZN", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11302", m:"NISSAN FRONTIER", p:"AH337FB", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11209", m:"NISSAN FRONTIER", p:"AH568ZU", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11184", m:"NISSAN FRONTIER", p:"AH569AH", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11217", m:"NISSAN FRONTIER", p:"AH538CN", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11204", m:"NISSAN FRONTIER", p:"AH485FF", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11140", m:"NISSAN FRONTIER", p:"AH268DZ", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 15", km: 0, activo: true},
+        {id:"10267", m:"FIAT CRONOS", p:"AG274HF", t:"SEDAN", a:"2023", z:"COMISARIA 15B", km: 0, activo: true},
+        {id:"10328", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 15A", km: 0, activo: true},
+        {id:"8608", m:"FIAT SIENA", p:"AC591MP", t:"SEDAN", a:"2018", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9579", m:"FIAT CRONOS", p:"AF614NT", t:"SEDAN", a:"2022", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9894", m:"FIAT CRONOS", p:"AF913UK", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9895", m:"FIAT CRONOS", p:"AF911SU", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10008", m:"FIAT CRONOS", p:"AF911QM", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10023", m:"FIAT CRONOS", p:"AF911RC", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10038", m:"FIAT CRONOS", p:"AF913UC", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10457", m:"NISSAN FRONTIER", p:"AG318NY", t:"PICK-UP", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10790", m:"NISSAN FRONTIER", p:"AG583TI", t:"PICK-UP", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9403", m:"NISSAN FRONTIER", p:"AE896HO", t:"PICK-UP", a:"2021", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9387", m:"NISSAN FRONTIER", p:"AE919XN", t:"PICK-UP", a:"2021", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11303", m:"NISSAN FRONTIER", p:"AH359ED", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11444", m:"NISSAN FRONTIER", p:"AH337EG", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11270", m:"NISSAN FRONTIER", p:"AH255TM", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11188", m:"NISSAN FRONTIER", p:"AH568ZY", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11317", m:"NISSAN FRONTIER", p:"AH409IE", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9626", m:"NISSAN FRONTIER", p:"AF575WD", t:"PICK-UP", a:"2022", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"A2465", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2544", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2613", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2623", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2624", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2647", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2652", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2662", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true}
+    ];
+
+    function renderTable(data) {
+        const tbody = document.getElementById('tbodyFlota');
+        tbody.innerHTML = data.map(v => {
+            const idDisplay = v.id.length > 4 ? v.id.slice(-4) : v.id;
+            
+            return `
+            <tr>
+                <td><strong>${idDisplay}</strong></td>
+                <td>
+                    <div style="font-weight:600">${v.m}</div>
+                    <div style="font-size:0.75rem; color:#777">${v.t} | Mod. ${v.a}</div>
+                </td>
+                <td><code>${v.p}</code></td>
+                <td>
+                    <div class="km-box">
+                        <span style="font-weight:bold; color:#444">${v.km.toLocaleString()} KM</span>
+                        <button class="btn-km" onclick="cambiarKM('${v.id}')"><i class="fas fa-edit"></i> Editar</button>
+                    </div>
+                </td>
+                <td>
+                    <span class="tag ${v.activo ? 'status-on' : 'status-off'}" onclick="toggleStatus('${v.id}')">
+                        <i class="fas ${v.activo ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                        ${v.activo ? 'OPERATIVO' : 'FUERA DE SERVICIO'}
+                    </span>
+                </td>
+                <td><i class="fas fa-map-marker-alt" style="color:var(--accent); margin-right:5px;"></i> ${v.z}</td>
+            </tr>
+        `}).join('');
+        updateStats(flota);
+    }
+
+    function toggleStatus(id) {
+        const item = flota.find(x => x.id === id);
+        if(item) {
+            item.activo = !item.activo;
+            runFilters();
+        }
+    }
+
+    function cambiarKM(id) {
+        const unidad = flota.find(x => x.id === id);
+        const nuevo = prompt(`Actualizar KM para unidad #${unidad.id}:`, unidad.km);
+        if(nuevo !== null && !isNaN(nuevo) && nuevo !== "") {
+            unidad.km = parseInt(nuevo);
+            runFilters();
+        }
+    }
+
+    function updateStats(data) {
+        document.getElementById('st-total').innerText = data.length;
+        document.getElementById('st-on').innerText = data.filter(x => x.activo).length;
+        document.getElementById('st-off').innerText = data.filter(x => !x.activo).length;
+        document.getElementById('st-motos').innerText = data.filter(x => x.t === 'MOTO' && x.activo).length;
+    }
+
+    function runFilters() {
+        const query = document.getElementById('mainSearch').value.toLowerCase();
+        const type = document.getElementById('filterType').value;
+        const filtrados = flota.filter(v => {
+            const matchSearch = Object.values(v).some(val => val.toString().toLowerCase().includes(query));
+            const matchType = type === "" || v.t === type;
+            return matchSearch && matchType;
+        });
+        renderTable(filtrados);
+    }
+
+    function switchView(viewId, el) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        el.classList.add('active');
+    }
+
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleString('es-AR');
+    }, 1000);
+
+    window.onload = () => renderTable(flota);
+</script>
+
+</body>
+</html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
