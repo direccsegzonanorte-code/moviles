@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA TÁCTICO - LOGÍSTICA POLICIAL</title>
+    <title>SISTEMA LOGÍSTICA 8</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -20,6 +20,7 @@
         * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; color: #333; }
 
+        /* Header Actualizado */
         header {
             background: var(--primary);
             color: white;
@@ -32,11 +33,14 @@
             z-index: 100;
         }
 
-        .logo-area { display: flex; align-items: center; gap: 15px; font-weight: bold; font-size: 1.2rem; }
-        #clock { font-family: monospace; background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 4px; }
+        .logo-area { display: flex; align-items: center; gap: 15px; font-weight: bold; font-size: 1.3rem; letter-spacing: 1px; }
+        .logo-area span { color: var(--text-light); }
+        .logo-area b { color: var(--accent); margin-left: 5px; }
+        #clock { font-family: monospace; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 4px; font-size: 0.9rem; }
 
         .main-container { display: grid; grid-template-columns: 240px 1fr; flex-grow: 1; overflow: hidden; }
 
+        /* Sidebar */
         nav { background: var(--secondary); color: white; padding: 1rem; border-right: 1px solid rgba(255,255,255,0.1); }
         .nav-group-title { font-size: 0.7rem; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px 10px; }
         .nav-item {
@@ -52,6 +56,7 @@
         }
         .nav-item:hover, .nav-item.active { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(48, 79, 254, 0.3); }
 
+        /* Dashboard */
         main { padding: 25px; overflow-y: auto; background: var(--bg); }
         .view { display: none; animation: fadeIn 0.3s ease; }
         .view.active { display: block; }
@@ -62,6 +67,7 @@
         .stat-card h3 { margin: 0; font-size: 0.7rem; color: #666; text-transform: uppercase; }
         .stat-card .num { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
 
+        /* Filtros */
         .search-container {
             background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;
             display: flex; gap: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -69,23 +75,27 @@
         .search-container input { flex-grow: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; }
         .search-container select { padding: 10px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
 
+        /* Tabla */
         .table-wrap { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { background: #f8f9fa; color: var(--primary); padding: 15px; font-size: 0.8rem; text-transform: uppercase; border-bottom: 2px solid #eee; }
-        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; vertical-align: middle; }
         tr:hover { background: #f1f5ff; }
 
-        /* Tags de Estado y Tipos */
-        .tag { padding: 5px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 5px; cursor: default; }
-        .tag-pickup { background: #e3f2fd; color: #1565c0; }
-        .tag-moto { background: #fff3e0; color: #e65100; }
-        .tag-especial { background: #f3e5f5; color: #7b1fa2; }
+        /* Tags e Indicadores */
+        .tag { padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; border: 1px solid transparent; }
         
-        .status-on { background: #c8e6c9; color: #1b5e20; cursor: pointer; border: 1px solid #81c784; }
-        .status-off { background: #ffcdd2; color: #b71c1c; cursor: pointer; border: 1px solid #e57373; }
+        .status-on { background: #e8f5e9; color: #2e7d32; cursor: pointer; border-color: #c8e6c9; }
+        .status-on:hover { background: #c8e6c9; }
         
-        .btn-km { border: none; background: #eee; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; margin-top: 4px; color: #555; }
-        .btn-km:hover { background: #ddd; }
+        .status-off { background: #ffebee; color: #c62828; cursor: pointer; border-color: #ffcdd2; }
+        .status-off:hover { background: #ffcdd2; }
+        
+        .km-box { display: flex; flex-direction: column; }
+        .btn-km { border: none; background: #304ffe15; color: var(--accent); padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 0.65rem; font-weight: bold; margin-top: 5px; width: fit-content; }
+        .btn-km:hover { background: var(--accent); color: white; }
+
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #d63384; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -93,7 +103,7 @@
 <header>
     <div class="logo-area">
         <i class="fas fa-shield-alt"></i>
-        <span>LOGÍSTICA POLICIAL | CONTROL OPERATIVO</span>
+        <span>LOGÍSTICA 8 | <b>FLOTA</b></span>
     </div>
     <div id="clock">--:--:--</div>
 </header>
@@ -102,18 +112,19 @@
     <nav>
         <div class="nav-group-title">Operaciones</div>
         <div class="nav-item active" onclick="switchView('v-flota', this)">
-            <i class="fas fa-car-side"></i> Inventario Flota
+            <i class="fas fa-truck-monster"></i> Gestión de Flota
         </div>
         <div class="nav-item" onclick="switchView('v-taller', this)">
-            <i class="fas fa-tools"></i> Taller / Mecánica
+            <i class="fas fa-tools"></i> Taller Mecánico
         </div>
-        <div class="nav-group-title">Logística</div>
+        <div class="nav-group-title">Administración</div>
         <div class="nav-item" onclick="switchView('v-taller', this)">
-            <i class="fas fa-boxes"></i> Repuestos
+            <i class="fas fa-file-invoice"></i> Reportes
         </div>
     </nav>
 
     <main>
+        <!-- VISTA FLOTA -->
         <div id="v-flota" class="view active">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -129,14 +140,14 @@
                     <div class="num" id="st-off" style="color: var(--danger)">0</div>
                 </div>
                 <div class="stat-card" style="border-top-color: var(--warning)">
-                    <h3>Motos Operativas</h3>
+                    <h3>Motos Activas</h3>
                     <div class="num" id="st-motos">0</div>
                 </div>
             </div>
 
             <div class="search-container">
                 <i class="fas fa-search" style="align-self: center; color: #999;"></i>
-                <input type="text" id="mainSearch" onkeyup="runFilters()" placeholder="Buscar por Patente, ID o Destino...">
+                <input type="text" id="mainSearch" onkeyup="runFilters()" placeholder="Filtrar por ID, Patente, Marca o Destino...">
                 <select id="filterType" onchange="runFilters()">
                     <option value="">Todos los Tipos</option>
                     <option value="PICK-UP">Pick-Up</option>
@@ -149,12 +160,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Vehículo / Marca</th>
+                            <th>ID Interno</th>
+                            <th>Vehículo / Tipo</th>
                             <th>Patente</th>
-                            <th>Kilometraje</th>
-                            <th>Estado Servicio</th>
-                            <th>Destino</th>
+                            <th>Recorrido (KM)</th>
+                            <th>Disponibilidad</th>
+                            <th>Destino Asignado</th>
                         </tr>
                     </thead>
                     <tbody id="tbodyFlota"></tbody>
@@ -162,18 +173,20 @@
             </div>
         </div>
 
+        <!-- VISTA TALLER (Placeholder) -->
         <div id="v-taller" class="view">
             <h2>Módulo de Taller</h2>
-            <div style="background:white; padding:30px; border-radius:10px; text-align:center;">
-                <i class="fas fa-wrench" style="font-size:3rem; color:var(--accent); margin-bottom:15px;"></i>
-                <p>Módulo en desarrollo para gestión de Órdenes de Trabajo.</p>
+            <div style="background:white; padding:40px; border-radius:10px; text-align:center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <i class="fas fa-wrench" style="font-size:3.5rem; color:var(--accent); margin-bottom:20px;"></i>
+                <h3>Control de Mantenimiento</h3>
+                <p style="color: #666;">Seleccione una unidad desde la pestaña de Flota para abrir una Orden de Trabajo.</p>
             </div>
         </div>
     </main>
 </div>
 
 <script>
-    // BASE DE DATOS INICIAL
+    // BASE DE DATOS UNIFICADA
     const flota = [
         {id:"18472", m:"CHEVROLET S10", p:"AC151SZ", t:"PICK-UP", a:"2018", z:"DIR. SEGURIDAD ZONA 8", km: 145200, activo: true},
         {id:"27589", m:"FIAT STRADA", p:"AA053UX", t:"SEDAN", a:"2016", z:"DIR. SEGURIDAD ZONA 8", km: 98000, activo: false},
@@ -182,45 +195,53 @@
         {id:"810368", m:"FIAT CRONOS", p:"AG303JT", t:"SEDAN", a:"2023", z:"COMISARIA 14A", km: 45000, activo: true},
         {id:"49A2465", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 800, activo: true},
         {id:"50A2544", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 1100, activo: true},
-        {id:"51A2613", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 450, activo: false}
+        {id:"51A2613", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 450, activo: false},
+        {id:"52A2623", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 2100, activo: true},
+        {id:"1010272", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 14C", km: 32100, activo: true}
     ];
 
     function renderTable(data) {
         const tbody = document.getElementById('tbodyFlota');
         tbody.innerHTML = data.map(v => `
             <tr>
-                <td><strong>${v.id}</strong></td>
-                <td>${v.m} <br> <small style="color:#888">${v.t}</small></td>
-                <td><code style="background:#eee; padding:2px 5px; border-radius:3px;">${v.p}</code></td>
+                <td><strong>#${v.id}</strong></td>
                 <td>
-                    <div style="font-weight:bold">${v.km.toLocaleString()} KM</div>
-                    <button class="btn-km" onclick="cambiarKM('${v.id}')">Actualizar</button>
+                    <div style="font-weight:600">${v.m}</div>
+                    <div style="font-size:0.75rem; color:#777">${v.t} | Mod. ${v.a}</div>
+                </td>
+                <td><code>${v.p}</code></td>
+                <td>
+                    <div class="km-box">
+                        <span style="font-weight:bold; color:#444">${v.km.toLocaleString()} KM</span>
+                        <button class="btn-km" onclick="cambiarKM('${v.id}')"><i class="fas fa-edit"></i> Editar</button>
+                    </div>
                 </td>
                 <td>
                     <span class="tag ${v.activo ? 'status-on' : 'status-off'}" onclick="toggleStatus('${v.id}')">
-                        <i class="fas ${v.activo ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i>
-                        ${v.activo ? 'EN SERVICIO' : 'FUERA SERVICIO'}
+                        <i class="fas ${v.activo ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                        ${v.activo ? 'OPERATIVO' : 'FUERA DE SERVICIO'}
                     </span>
                 </td>
-                <td>${v.z}</td>
+                <td><i class="fas fa-map-marker-alt" style="color:var(--accent); margin-right:5px;"></i> ${v.z}</td>
             </tr>
         `).join('');
         updateStats(flota);
     }
 
+    // Funciones de Lógica
     function toggleStatus(id) {
         const item = flota.find(x => x.id === id);
         if(item) {
             item.activo = !item.activo;
-            runFilters(); // Refresca con los filtros actuales
+            runFilters();
         }
     }
 
     function cambiarKM(id) {
-        const nuevo = prompt("Ingrese Kilometraje Actual:");
-        if(nuevo && !isNaN(nuevo)) {
-            const item = flota.find(x => x.id === id);
-            item.km = parseInt(nuevo);
+        const unidad = flota.find(x => x.id === id);
+        const nuevo = prompt(`Actualizar KM para la unidad ${unidad.id}:`, unidad.km);
+        if(nuevo !== null && !isNaN(nuevo) && nuevo !== "") {
+            unidad.km = parseInt(nuevo);
             runFilters();
         }
     }
@@ -251,8 +272,12 @@
         el.classList.add('active');
     }
 
+    // Reloj en tiempo real
     setInterval(() => {
-        document.getElementById('clock').innerText = new Date().toLocaleString('es-AR');
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleString('es-AR', { 
+            hour: '2-digit', minute: '2-digit', second: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' 
+        });
     }, 1000);
 
     window.onload = () => renderTable(flota);
