@@ -129,7 +129,7 @@
                 </div>
                 <div class="stat-card" style="border-top-color: var(--warning)">
                     <h3>Motos Activas</h3>
-                    <div class="num" id="st-motos">0</div>
+                    <div class="num" id="st-motos" style="color: #f57c00">0</div>
                 </div>
             </div>
 
@@ -141,6 +141,7 @@
                     <option value="PICK-UP">Pick-Up</option>
                     <option value="SEDAN">Sedán</option>
                     <option value="MOTO">Motos</option>
+                    <option value="CARRO">Carros / Especiales</option>
                 </select>
             </div>
 
@@ -174,26 +175,72 @@
 
 <script>
     const flota = [
-        {id:"18472", m:"CHEVROLET S10", p:"AC151SZ", t:"PICK-UP", a:"2018", z:"DIR. SEGURIDAD ZONA 8", km: 145200, activo: true},
-        {id:"27589", m:"FIAT STRADA", p:"AA053UX", t:"SEDAN", a:"2016", z:"DIR. SEGURIDAD ZONA 8", km: 98000, activo: false},
-        {id:"310746", m:"NISSAN FRONTIER", p:"AG567QT", t:"PICK-UP", a:"2023", z:"DIR. SEGURIDAD ZONA 8", km: 15400, activo: true},
-        {id:"611207", m:"NISSAN FRONTIER", p:"AH337ES", t:"PICK-UP", a:"2025", z:"DISTRITO 14", km: 1200, activo: true},
-        {id:"810368", m:"FIAT CRONOS", p:"AG303JT", t:"SEDAN", a:"2023", z:"COMISARIA 14A", km: 45000, activo: true},
-        {id:"49A2465", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 800, activo: true},
-        {id:"50A2544", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 1100, activo: true},
-        {id:"51A2613", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"CAP 14", km: 450, activo: false},
-        {id:"1010272", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 14C", km: 32100, activo: true}
+        {id:"8472", m:"CHEVROLET S10", p:"AC151SZ", t:"PICK-UP", a:"2018", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"7589", m:"FIAT STRADA", p:"AA053UX", t:"SEDAN", a:"2016", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"10746", m:"NISSAN FRONTIER", p:"AG567QT", t:"PICK-UP", a:"2023", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"D54", m:"CARRO", p:"AC151SZ", t:"CARRO", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"D65", m:"PLANCHA", p:"AC151SZ", t:"PLANCHA", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
+        {id:"11207", m:"NISSAN FRONTIER", p:"AH337ES", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 14", km: 0, activo: true},
+        {id:"8343", m:"CHEVROLET S10", p:"AB549FZ", t:"PICK-UP", a:"2017", z:"COMISARIA 14A", km: 0, activo: true},
+        {id:"10368", m:"FIAT CRONOS", p:"AG303JT", t:"SEDAN", a:"2023", z:"COMISARIA 14A", km: 0, activo: true},
+        {id:"10268", m:"FIAT CRONOS", p:"AG297CF", t:"SEDAN", a:"2023", z:"COMISARIA 14B", km: 0, activo: true},
+        {id:"10272", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 14C", km: 0, activo: true},
+        {id:"9588", m:"FIAT CRONOS", p:"AF625ZE", t:"SEDAN", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9577", m:"FIAT CRONOS", p:"AF625ZF", t:"SEDAN", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9639", m:"NISSAN FRONTIER", p:"AF596JP", t:"PICK-UP", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9413", m:"NISSAN FRONTIER", p:"AE919XV", t:"PICK-UP", a:"2021", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9370", m:"NISSAN FRONTIER", p:"AE919YB", t:"PICK-UP", a:"2021", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9233", m:"NISSAN FRONTIER", p:"AE291QY", t:"PICK-UP", a:"2020", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"9634", m:"NISSAN FRONTIER", p:"AF575WQ", t:"PICK-UP", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"10216", m:"NISSAN FRONTIER", p:"AF913YP", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"10586", m:"NISSAN FRONTIER", p:"AG567XD", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"10650", m:"NISSAN FRONTIER", p:"AG542SM", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11213", m:"NISSAN FRONTIER", p:"AH485FE", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11220", m:"NISSAN FRONTIER", p:"AH268DJ", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11311", m:"NISSAN FRONTIER", p:"AH568ZN", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11302", m:"NISSAN FRONTIER", p:"AH337FB", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11209", m:"NISSAN FRONTIER", p:"AH568ZU", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11184", m:"NISSAN FRONTIER", p:"AH569AH", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11217", m:"NISSAN FRONTIER", p:"AH538CN", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11204", m:"NISSAN FRONTIER", p:"AH485FF", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"11140", m:"NISSAN FRONTIER", p:"AH268DZ", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 15", km: 0, activo: true},
+        {id:"10267", m:"FIAT CRONOS", p:"AG274HF", t:"SEDAN", a:"2023", z:"COMISARIA 15B", km: 0, activo: true},
+        {id:"10328", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 15A", km: 0, activo: true},
+        {id:"8608", m:"FIAT SIENA", p:"AC591MP", t:"SEDAN", a:"2018", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9579", m:"FIAT CRONOS", p:"AF614NT", t:"SEDAN", a:"2022", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9894", m:"FIAT CRONOS", p:"AF913UK", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9895", m:"FIAT CRONOS", p:"AF911SU", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10008", m:"FIAT CRONOS", p:"AF911QM", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10023", m:"FIAT CRONOS", p:"AF911RC", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10038", m:"FIAT CRONOS", p:"AF913UC", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10457", m:"NISSAN FRONTIER", p:"AG318NY", t:"PICK-UP", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"10790", m:"NISSAN FRONTIER", p:"AG583TI", t:"PICK-UP", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9403", m:"NISSAN FRONTIER", p:"AE896HO", t:"PICK-UP", a:"2021", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9387", m:"NISSAN FRONTIER", p:"AE919XN", t:"PICK-UP", a:"2021", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11303", m:"NISSAN FRONTIER", p:"AH359ED", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11444", m:"NISSAN FRONTIER", p:"AH337EG", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11270", m:"NISSAN FRONTIER", p:"AH255TM", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11188", m:"NISSAN FRONTIER", p:"AH568ZY", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"11317", m:"NISSAN FRONTIER", p:"AH409IE", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"9626", m:"NISSAN FRONTIER", p:"AF575WD", t:"PICK-UP", a:"2022", z:"DIVISION CAP 15", km: 0, activo: true},
+        {id:"A2465", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2544", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2613", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2623", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2624", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2647", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2652", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
+        {id:"A2662", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true}
     ];
 
     function renderTable(data) {
         const tbody = document.getElementById('tbodyFlota');
         tbody.innerHTML = data.map(v => {
-            // Lógica para dejar solo los últimos 4 dígitos
-            const idCorto = v.id.toString().slice(-4);
+            const idDisplay = v.id.length > 4 ? v.id.slice(-4) : v.id;
             
             return `
             <tr>
-                <td><strong>${idCorto}</strong></td>
+                <td><strong>${idDisplay}</strong></td>
                 <td>
                     <div style="font-weight:600">${v.m}</div>
                     <div style="font-size:0.75rem; color:#777">${v.t} | Mod. ${v.a}</div>
@@ -227,7 +274,7 @@
 
     function cambiarKM(id) {
         const unidad = flota.find(x => x.id === id);
-        const nuevo = prompt(`Actualizar KM para unidad #${unidad.id.toString().slice(-4)}:`, unidad.km);
+        const nuevo = prompt(`Actualizar KM para unidad #${unidad.id}:`, unidad.km);
         if(nuevo !== null && !isNaN(nuevo) && nuevo !== "") {
             unidad.km = parseInt(nuevo);
             runFilters();
