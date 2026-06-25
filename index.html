@@ -3,238 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOGÍSTICA 8 - CONTROL OPERATIVO FINAL</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Control de Flota y Kilometraje</title>
     <style>
         :root {
-            --primary: #0a192f;
-            --secondary: #172a45;
-            --accent: #304ffe;
-            --success: #00c853;
-            --danger: #ff1744;
-            --bg: #e9ecef;
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --bg-color: #f8fafc;
+            --text-color: #334155;
         }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background-color: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
 
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 15px 25px;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 4px solid var(--accent);
+            gap: 10px;
         }
 
-        .logo-area { display: flex; align-items: center; gap: 12px; font-weight: bold; font-size: 1.2rem; }
-        #clock { font-family: monospace; background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 4px; }
-
-        main { padding: 20px; overflow-y: auto; flex-grow: 1; }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        .stat-card h3 { margin: 0; font-size: 0.8rem; color: #666; text-transform: uppercase; }
-        .stat-card .num { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
-
-        .search-bar {
-            background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;
-            display: flex; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .search-bar input { flex-grow: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; outline: none; }
-
-        .table-container { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f1f3f9; padding: 15px; font-size: 0.8rem; color: #333; text-transform: uppercase; text-align: left; }
-        td { padding: 12px 15px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-align: middle; }
-        
-        .btn-cmd {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 0.75rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s;
-            min-width: 150px;
-            justify-content: center;
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 16px;
         }
 
-        .btn-servicio { background: #e8f5e9; color: #2e7d32; border: 1px solid #2e7d32; }
-        .btn-fuera { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
-
-        .btn-km {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.75rem;
+        table {
             width: 100%;
-            margin-top: 5px;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
         }
 
-        .km-val { font-weight: bold; font-family: monospace; font-size: 1.1rem; color: #222; }
-        code { background: #f4f4f4; padding: 3px 6px; border-radius: 4px; font-weight: bold; color: #d63384; }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .km-input {
+            width: 100px;
+            padding: 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            text-align: right;
+        }
+
+        .km-input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+
+        .section-divider {
+            background-color: #e2e8f0;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo-area"><i class="fas fa-shuttle-van"></i> LOGÍSTICA 8 | GESTIÓN OPERATIVA</div>
-    <div id="clock">--:--:--</div>
-</header>
-
-<main>
-    <div class="stats-grid">
-        <div class="stat-card" style="border-top: 4px solid var(--accent);"><h3>Total Móviles</h3><div class="num" id="st-total">56</div></div>
-        <div class="stat-card" style="border-top: 4px solid var(--success);"><h3>En Servicio</h3><div class="num" id="st-on" style="color: var(--success)">0</div></div>
-        <div class="stat-card" style="border-top: 4px solid var(--danger);"><h3>Fuera de Servicio</h3><div class="num" id="st-off" style="color: var(--danger)">0</div></div>
+<div class="container">
+    <h1>Control de Flota Vehicular</h1>
+    
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar por ID, División o Vehículo...">
     </div>
 
-    <div class="search-bar">
-        <input type="text" id="mainSearch" onkeyup="render()" placeholder="Filtrar por ID, Patente o Destino...">
-    </div>
+    <table id="fleetTable">
+        <thead>
+            <tr>
+                <th>ID / Interno</th>
+                <th>Dependencia / División</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Kilometraje (Km)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>10746</td><td>DIRECCION SEGURIDAD ZONA 8</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="10746" placeholder="0"></td></tr>
+            <tr><td>8472</td><td>DIRECCION SEGURIDAD ZONA 8</td><td>CHEVROLET</td><td>S10</td><td><input type="number" class="km-input" data-id="8472" placeholder="0"></td></tr>
+            <tr><td>7589</td><td>DIRECCION SEGURIDAD ZONA 8</td><td>FIAT</td><td>STRADA</td><td><input type="number" class="km-input" data-id="7589" placeholder="0"></td></tr>
+            <tr><td>D54</td><td>DIRECCION SEGURIDAD ZONA 8</td><td>CARRO</td><td>0</td><td><input type="number" class="km-input" data-id="D54" placeholder="0"></td></tr>
+            <tr><td>D65</td><td>DIRECCION SEGURIDAD ZONA 8</td><td>PLANCHA</td><td>1</td><td><input type="number" class="km-input" data-id="D65" placeholder="0"></td></tr>
+            <tr><td>8343</td><td>COMISARIA 14A</td><td>CHEVROLET</td><td>S10</td><td><input type="number" class="km-input" data-id="8343" placeholder="0"></td></tr>
+            <tr><td>10368</td><td>COMISARIA 14A</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="10368" placeholder="0"></td></tr>
+            <tr><td>10268</td><td>COMISARIA 14B</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="10268" placeholder="0"></td></tr>
+            <tr><td>10272</td><td>COMISARIA 14C</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="10272" placeholder="0"></td></tr>
+            <tr><td>10267</td><td>COMISARIA 15B</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="10267" placeholder="0"></td></tr>
+            <tr><td>10328</td><td>COMISARIA 15 A</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="10328" placeholder="0"></td></tr>
+            <tr><td>11207</td><td>JEFE DE DISTRITO 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11207" placeholder="0"></td></tr>
+            <tr><td>11213</td><td>JEFE CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11213" placeholder="0"></td></tr>
+            <tr><td>9370</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="9370" placeholder="0"></td></tr>
+            <tr><td>10650</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="10650" placeholder="0"></td></tr>
+            <tr><td>11184</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11184" placeholder="0"></td></tr>
+            <tr><td>11204</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11204" placeholder="0"></td></tr>
+            <tr><td>11209</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11209" placeholder="0"></td></tr>
+            <tr><td>11217</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11217" placeholder="0"></td></tr>
+            <tr><td>11311</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11311" placeholder="0"></td></tr>
+            <tr><td>9634</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="9634" placeholder="0"></td></tr>
+            <tr><td>11302</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11302" placeholder="0"></td></tr>
+            <tr><td>10586</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="10586" placeholder="0"></td></tr>
+            <tr><td>9413</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="9413" placeholder="0"></td></tr>
+            <tr><td>9233</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="9233" placeholder="0"></td></tr>
+            <tr><td>10216</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="10216" placeholder="0"></td></tr>
+            <tr><td>9639</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="9639" placeholder="0"></td></tr>
+            <tr><td>11220</td><td>SUPERVISOR CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11220" placeholder="0"></td></tr>
+            <tr><td>9387</td><td>DIVISION CAP 14</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="9387" placeholder="0"></td></tr>
+            <tr><td>11140</td><td>JEFE DE DISTRITO 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11140" placeholder="0"></td></tr>
+            <tr><td>11270</td><td>JEFE DE CAP 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11270" placeholder="0"></td></tr>
+            <tr><td>11303</td><td>SUPERVISOR CAP 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11303" placeholder="0"></td></tr>
+            <tr><td>10008</td><td>DIVISION CAP 15</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="10008" placeholder="0"></td></tr>
+            <tr><td>9579</td><td>DIVISION CAP 15</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="9579" placeholder="0"></td></tr>
+            <tr><td>11444</td><td>DIVISION CAP 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11444" placeholder="0"></td></tr>
+            <tr><td>11188</td><td>DIVISION CAP 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11188" placeholder="0"></td></tr>
+            <tr><td>9577</td><td>DIVISION CAP 15</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="9577" placeholder="0"></td></tr>
+            <tr><td>10790</td><td>DIVISION CAP 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="10790" placeholder="0"></td></tr>
+            <tr><td>8608</td><td>DIVISION CAP 15</td><td>FIAT</td><td>SIENA</td><td><input type="number" class="km-input" data-id="8608" placeholder="0"></td></tr>
+            <tr><td>9403</td><td>DIVISION CAP 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="9403" placeholder="0"></td></tr>
+            <tr><td>9626</td><td>DIVISION CAP 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="9626" placeholder="0"></td></tr>
+            <tr><td>10038</td><td>DIVISION CAP 15</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="10038" placeholder="0"></td></tr>
+            <tr><td>9895</td><td>DIVISION CAP 15</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="9895" placeholder="0"></td></tr>
+            <tr><td>11317</td><td>DIVISION CAP 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="11317" placeholder="0"></td></tr>
+            <tr><td>10457</td><td>DIVISION CAP 15</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="10457" placeholder="0"></td></tr>
+            <tr><td>10023</td><td>DIVISION CAP 15</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="10023" placeholder="0"></td></tr>
+            <tr><td>9894</td><td>DIVISION CAP 15</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="9894" placeholder="0"></td></tr>
+            <tr><td>9588</td><td>DIVISION CAP 14</td><td>FIAT</td><td>CRONOS</td><td><input type="number" class="km-input" data-id="9588" placeholder="0"></td></tr>
+            <tr><td>10711</td><td>S.D.G.S.C.N.</td><td>NISSAN</td><td>FRONTIER</td><td><input type="number" class="km-input" data-id="10711" placeholder="0"></td></tr>
 
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Móvil</th>
-                    <th>Vehículo</th>
-                    <th>Patente</th>
-                    <th style="width: 180px;">Kilometraje</th>
-                    <th>Comando de Estado</th>
-                    <th>Destino</th>
-                </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-        </table>
-    </div>
-</main>
+            <tr class="section-divider"><td colspan="5">MOTOCICLETAS - CAP 14</td></tr>
+            <tr><td>A-2647</td><td>S.D.G.S.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2647" placeholder="0"></td></tr>
+            <tr><td>A-2624</td><td>S.D.G.S.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2624" placeholder="0"></td></tr>
+            <tr><td>A-2465</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2465" placeholder="0"></td></tr>
+            <tr><td>A-2503</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2503" placeholder="0"></td></tr>
+            <tr><td>A-2456</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2456" placeholder="0"></td></tr>
+            <tr><td>A-2515</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2515" placeholder="0"></td></tr>
+            <tr><td>A-2518</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2518" placeholder="0"></td></tr>
+            <tr><td>A-2613</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2613" placeholder="0"></td></tr>
+            <tr><td>A-2662</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2662" placeholder="0"></td></tr>
+            <tr><td>A-2652</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2652" placeholder="0"></td></tr>
+            <tr><td>A-2544</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2544" placeholder="0"></td></tr>
+            <tr><td>A-2623</td><td>S.D.G.C.N.</td><td>KAWASAKI</td><td>KLR300</td><td><input type="number" class="km-input" data-id="A-2623" placeholder="0"></td></tr>
+        </tbody>
+    </table>
+</div>
 
 <script>
-    // DATOS ORIGINALES RESTAURADOS (56 UNIDADES)
-    const flota = [
-        {id:"8472", m:"CHEVROLET S10", p:"AC151SZ", t:"PICK-UP", a:"2018", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"7589", m:"FIAT STRADA", p:"AA053UX", t:"SEDAN", a:"2016", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"10746", m:"NISSAN FRONTIER", p:"AG567QT", t:"PICK-UP", a:"2023", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"D54", m:"CARRO", p:"AC151SZ", t:"CARRO", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"D65", m:"PLANCHA", p:"AC151SZ", t:"PLANCHA", a:"0", z:"DIRECCIÓN SEGURIDAD ZONA 8", km: 0, activo: true},
-        {id:"11207", m:"NISSAN FRONTIER", p:"AH337ES", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 14", km: 0, activo: true},
-        {id:"8343", m:"CHEVROLET S10", p:"AB549FZ", t:"PICK-UP", a:"2017", z:"COMISARIA 14A", km: 0, activo: true},
-        {id:"10368", m:"FIAT CRONOS", p:"AG303JT", t:"SEDAN", a:"2023", z:"COMISARIA 14A", km: 0, activo: true},
-        {id:"10268", m:"FIAT CRONOS", p:"AG297CF", t:"SEDAN", a:"2023", z:"COMISARIA 14B", km: 0, activo: true},
-        {id:"10272", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 14C", km: 0, activo: true},
-        {id:"9588", m:"FIAT CRONOS", p:"AF625ZE", t:"SEDAN", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"9577", m:"FIAT CRONOS", p:"AF625ZF", t:"SEDAN", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"9639", m:"NISSAN FRONTIER", p:"AF596JP", t:"PICK-UP", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"9413", m:"NISSAN FRONTIER", p:"AE919XV", t:"PICK-UP", a:"2021", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"9370", m:"NISSAN FRONTIER", p:"AE919YB", t:"PICK-UP", a:"2021", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"9233", m:"NISSAN FRONTIER", p:"AE291QY", t:"PICK-UP", a:"2020", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"9634", m:"NISSAN FRONTIER", p:"AF575WQ", t:"PICK-UP", a:"2022", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"10216", m:"NISSAN FRONTIER", p:"AF913YP", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"10586", m:"NISSAN FRONTIER", p:"AG567XD", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"10650", m:"NISSAN FRONTIER", p:"AG542SM", t:"PICK-UP", a:"2023", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11213", m:"NISSAN FRONTIER", p:"AH485FE", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11220", m:"NISSAN FRONTIER", p:"AH268DJ", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11311", m:"NISSAN FRONTIER", p:"AH568ZN", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11302", m:"NISSAN FRONTIER", p:"AH337FB", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11209", m:"NISSAN FRONTIER", p:"AH568ZU", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11184", m:"NISSAN FRONTIER", p:"AH569AH", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11217", m:"NISSAN FRONTIER", p:"AH538CN", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11204", m:"NISSAN FRONTIER", p:"AH485FF", t:"PICK-UP", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"11140", m:"NISSAN FRONTIER", p:"AH268DZ", t:"PICK-UP", a:"2025", z:"DISTRITO JUDICIAL POLICIAL 15", km: 0, activo: true},
-        {id:"10267", m:"FIAT CRONOS", p:"AG274HF", t:"SEDAN", a:"2023", z:"COMISARIA 15B", km: 0, activo: true},
-        {id:"10328", m:"FIAT CRONOS", p:"AG297CL", t:"SEDAN", a:"2023", z:"COMISARIA 15A", km: 0, activo: true},
-        {id:"8608", m:"FIAT SIENA", p:"AC591MP", t:"SEDAN", a:"2018", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"9579", m:"FIAT CRONOS", p:"AF614NT", t:"SEDAN", a:"2022", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"9894", m:"FIAT CRONOS", p:"AF913UK", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"9895", m:"FIAT CRONOS", p:"AF911SU", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"10008", m:"FIAT CRONOS", p:"AF911QM", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"10023", m:"FIAT CRONOS", p:"AF911RC", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"10038", m:"FIAT CRONOS", p:"AF913UC", t:"SEDAN", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"10457", m:"NISSAN FRONTIER", p:"AG318NY", t:"PICK-UP", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"10790", m:"NISSAN FRONTIER", p:"AG583TI", t:"PICK-UP", a:"2023", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"9403", m:"NISSAN FRONTIER", p:"AE896HO", t:"PICK-UP", a:"2021", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"9387", m:"NISSAN FRONTIER", p:"AE919XN", t:"PICK-UP", a:"2021", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"11303", m:"NISSAN FRONTIER", p:"AH359ED", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"11444", m:"NISSAN FRONTIER", p:"AH337EGP", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"11270", m:"NISSAN FRONTIER", p:"AH255TM", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"11188", m:"NISSAN FRONTIER", p:"AH568ZY", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"11317", m:"NISSAN FRONTIER", p:"AH409IE", t:"PICK-UP", a:"2025", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"9626", m:"NISSAN FRONTIER", p:"AF575WD", t:"PICK-UP", a:"2022", z:"DIVISION CAP 15", km: 0, activo: true},
-        {id:"A2465", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"A2544", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"A2613", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"A2623", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"A2624", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"A2647", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"A2652", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true},
-        {id:"A2662", m:"KAWASAKI XLX300", p:"MOTO", t:"MOTO", a:"2025", z:"DIVISION CAP 14", km: 0, activo: true}
-    ];
+    // Al cargar la página, recupera los kilometrajes guardados
+    document.addEventListener("DOMContentLoaded", () => {
+        const inputs = document.querySelectorAll('.km-input');
+        inputs.forEach(input => {
+            const id = input.getAttribute('data-id');
+            const savedValue = localStorage.getItem('km_' + id);
+            if (savedValue) {
+                input.value = savedValue;
+            }
 
-    function render() {
-        const query = document.getElementById('mainSearch').value.toLowerCase();
-        const tbody = document.getElementById('tbody');
-        
-        const filtrados = flota.filter(v => 
-            v.id.toLowerCase().includes(query) || 
-            v.p.toLowerCase().includes(query) ||
-            v.z.toLowerCase().includes(query)
-        );
+            // Guarda automáticamente cuando el usuario cambia el valor
+            input.addEventListener('input', (e) => {
+                localStorage.setItem('km_' + id, e.target.value);
+            });
+        });
+    });
 
-        tbody.innerHTML = filtrados.map(v => `
-            <tr>
-                <td><strong>${v.id}</strong></td>
-                <td><div style="font-weight:600">${v.m}</div></td>
-                <td><code>${v.p}</code></td>
-                <td>
-                    <div class="km-val">${v.km.toLocaleString()} KM</div>
-                    <button class="btn-km" onclick="updateKM('${v.id}')">
-                        <i class="fas fa-edit"></i> ACTUALIZAR KILOMETRAJE
-                    </button>
-                </td>
-                <td>
-                    <button class="btn-cmd ${v.activo ? 'btn-servicio' : 'btn-fuera'}" onclick="toggle('${v.id}')">
-                        <i class="fas ${v.activo ? 'fa-check-circle' : 'fa-times-circle'}"></i>
-                        ${v.activo ? 'EN SERVICIO' : 'FUERA DE SERVICIO'}
-                    </button>
-                </td>
-                <td><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> ${v.z}</td>
-            </tr>
-        `).join('');
+    // Función del buscador en tiempo real
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toUpperCase();
+        const table = document.getElementById("fleetTable");
+        const tr = table.getElementsByTagName("tr");
 
-        document.getElementById('st-on').innerText = flota.filter(x => x.activo).length;
-        document.getElementById('st-off').innerText = flota.filter(x => !x.activo).length;
-    }
+        for (let i = 1; i < tr.length; i++) {
+            // Saltarse las filas de división estética
+            if (tr[i].classList.contains('section-divider')) continue;
 
-    function updateKM(id) {
-        const item = flota.find(x => x.id === id);
-        const nuevoKM = prompt(`Ingresar Kilometraje para Móvil ${id}:`, item.km);
-        if(nuevoKM !== null && !isNaN(nuevoKM) && nuevoKM !== "") {
-            item.km = parseInt(nuevoKM);
-            render();
+            let rowContainsText = false;
+            const tds = tr[i].getElementsByTagName("td");
+            
+            // Revisa las celdas de ID, Dependencia, Marca y Modelo
+            for (let j = 0; j < 4; j++) {
+                if (tds[j]) {
+                    const txtValue = tds[j].textContent || tds[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        rowContainsText = true;
+                        break;
+                    }
+                }
+            }
+            tr[i].style.display = rowContainsText ? "" : "none";
         }
     }
-
-    function toggle(id) {
-        const item = flota.find(x => x.id === id);
-        item.activo = !item.activo;
-        render();
-    }
-
-    setInterval(() => {
-        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-    }, 1000);
-
-    window.onload = render;
 </script>
 
 </body>
